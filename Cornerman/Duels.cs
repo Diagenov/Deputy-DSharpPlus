@@ -409,7 +409,7 @@ namespace Deputy.Database
 
             public static bool operator ==(DiscordMessage m, Duel d)
             {
-                return d != null && (m?.Author?.Id == d.duel.duelist1 || m?.Author?.Id == d.duel.duelist2);
+                return d != null && m?.Author?.Id != 0 && (m.Author.Id == d.duel.duelist1 || m.Author.Id == d.duel.duelist2);
             }
 
             public static bool operator !=(DiscordMessage m, Duel d)

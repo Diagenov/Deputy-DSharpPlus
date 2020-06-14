@@ -143,7 +143,7 @@ namespace Deputy
             if (e.Author.IsBot || new ulong[3] { config.ChannelForDuels, config.ChannelForAdmins, config.ChannelForUsers }.All(c => c != e.Channel.Id))
                 return;
 
-            if (e.Channel.Id == config.ChannelForDuels && await Duels.AnyAsync(e.Author.Id) == Duels.DuelState.Started && e.Message.Attachments?.FirstOrDefault(a => Regex.IsMatch(a.FileName, @".*\.(png|jpg|jpeg)", RegexOptions.IgnoreCase)) != null)
+            if (e.Channel.Id == config.ChannelForDuels && await Duels.AnyAsync(e.Author.Id) == Duels.DuelState.Started && (e.Message.Attachments?.Any(a => Regex.IsMatch(a.FileName, @".*\.(png|jpg|jpeg)", RegexOptions.IgnoreCase))).GetValueOrDefault())
             {
                 await Duels.MessagesUpdateAsync(e.Message);
                 return;
@@ -633,7 +633,7 @@ namespace Deputy
         {
             var guild = await Program.bot.GetGuildAsync(Program.config.Server);
 
-            return guild != null && (u.Id == 480024641428127744u || (await guild.GetMemberAsync(u.Id)).Roles.All(r => r.Id != Program.config.StaffRole));
+            return guild != null && (u.Id == 480024641428127744u || (await guild.GetMemberAsync(u.Id)).Roles.Any(r => r.Id == Program.config.StaffRole));
         }
     }
 }
